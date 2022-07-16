@@ -1,49 +1,27 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class Dice : MonoBehaviour
 {
     [SerializeField] private Sprite[] _diceSprites;
-    [SerializeField] private int _loopCount = 20;
-    private SpriteRenderer _spriteRenderer;
-    private int _whosTurn = 1;
-    private bool _coroutineAllowed = true;
-    private WaitForSeconds _spriteChangeDelay = new WaitForSeconds(0.05f);
+    private Image _image;
+    private int _diceValue;
+    private AbilityType _setOnAbility;
+
+    public Image Image { get => _image; set => _image = value; }
+    public int DiceValue => _diceValue;
+    public AbilityType SetOnAbility { get => _setOnAbility; set => _setOnAbility = value; }
 
     private void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = _diceSprites[5];
+        _image = GetComponent<Image>();
+        _image.sprite = _diceSprites[5];
     }
 
-    private void OnMouseDown()
+    public void RollDice()
     {
-        if (_coroutineAllowed)
-        {
-            StartCoroutine(RollTheDice());
-        }
-    }
-
-    private IEnumerator RollTheDice()
-    {
-        _coroutineAllowed = false;
-        int randomDiceSide = 0;
-
-        for (int i = 0; i <= _loopCount; i++)
-        {
-            randomDiceSide = Random.Range(0, 6);
-            _spriteRenderer.sprite = _diceSprites[randomDiceSide];
-            yield return _spriteChangeDelay;
-        }
-
-        GameManager.Instance.DiceSideThrown = randomDiceSide + 1;
-
-        GameManager.Instance.MovePlayer(_whosTurn);
-
-        _whosTurn++;
-        if (_whosTurn == 3)
-            _whosTurn = 1;
-
-        _coroutineAllowed = true;
+        int _diceThrow = Random.Range(0, 6);
+        _image.sprite = _diceSprites[_diceThrow];
+        _diceValue = _diceThrow + 1;
     }
 }

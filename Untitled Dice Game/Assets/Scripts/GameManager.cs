@@ -1,18 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private Transform[] _waypoints;
-    [SerializeField] private GameObject _player1, _player2;
-    private int _diceSideThrown = 0;
-    public int _player1StartWayPoint = 0;
-    public int _player2StartWayPoint = 0;
+    [SerializeField] private Canvas _canvas;
+    [SerializeField] private int _currentDiceAmount = 3;
+    [SerializeField] private Dice[] _dices = new Dice[6];
 
-    public Transform[] Waypoints => _waypoints;
-    public int DiceSideThrown { get => _diceSideThrown; set => _diceSideThrown = value; }
+    public Canvas Canvas => _canvas;
+    public int CurrentDiceAmount => _currentDiceAmount;
+    public Dice[] Dices => _dices;
 
     private void Awake()
     {
@@ -24,48 +22,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
+        RollDices();
     }
 
-    private void Update()
+    private void RollDices()
     {
-        if (_player1.GetComponent<FollowPath>().WayPointIndex > _player1StartWayPoint + _diceSideThrown)
+        for (int i = 0; i < _currentDiceAmount; i++)
         {
-            _player1.GetComponent<FollowPath>().IsAllowedToMove = false;
-            _player1StartWayPoint = _player1.GetComponent<FollowPath>().WayPointIndex - 1;
-        }
-
-        if (_player2.GetComponent<FollowPath>().WayPointIndex > _player2StartWayPoint + _diceSideThrown)
-        {
-            _player2.GetComponent<FollowPath>().IsAllowedToMove = false;
-            _player2StartWayPoint = _player2.GetComponent<FollowPath>().WayPointIndex - 1;
-        }
-
-        //if (_player1.GetComponent<FollowPath>().WayPointIndex == GameManager.Instance.Waypoints.Length)
-        //{
-        //    _player1.transform.position = GameManager.Instance.Waypoints[0].transform.position;
-        //    _player1StartWayPoint = 0;
-        //}
-
-        //if (_player2.GetComponent<FollowPath>().WayPointIndex == GameManager.Instance.Waypoints.Length)
-        //{
-        //    _player2.transform.position = GameManager.Instance.Waypoints[0].transform.position;
-        //    _player2StartWayPoint = 0;
-        //}
-    }
-
-    public void MovePlayer(int playerToMove)
-    {
-        switch (playerToMove)
-        {
-            case 1:
-                _player1.GetComponent<FollowPath>().IsAllowedToMove = true;
-                _player1.GetComponent<FollowPath>().SpacesMoved = _diceSideThrown;
-                break;
-            case 2:
-                _player2.GetComponent<FollowPath>().IsAllowedToMove = true;
-                _player2.GetComponent<FollowPath>().SpacesMoved = _diceSideThrown;
-                break;
+            _dices[i].RollDice();
         }
     }
 }
