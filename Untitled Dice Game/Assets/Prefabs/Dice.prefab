@@ -98,8 +98,20 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a0425cd23c471b64d850cb038fe12442, type: 3}
   - {fileID: 21300000, guid: def98d3951ad9104ba47864c61118c0d, type: 3}
   - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
-  _setOnAbility: 0
-  _isSet: 0
+  _weakDiceSprites:
+  - {fileID: 21300000, guid: bbae3f24ed799cd4b94b154e415fd31d, type: 3}
+  - {fileID: 21300000, guid: bbae3f24ed799cd4b94b154e415fd31d, type: 3}
+  - {fileID: 21300000, guid: bbae3f24ed799cd4b94b154e415fd31d, type: 3}
+  - {fileID: 21300000, guid: edf510a9bd7427d4389d4b6607bd1b18, type: 3}
+  - {fileID: 21300000, guid: edf510a9bd7427d4389d4b6607bd1b18, type: 3}
+  - {fileID: 21300000, guid: edf510a9bd7427d4389d4b6607bd1b18, type: 3}
+  _powerfulDiceSprites:
+  - {fileID: 21300000, guid: def98d3951ad9104ba47864c61118c0d, type: 3}
+  - {fileID: 21300000, guid: def98d3951ad9104ba47864c61118c0d, type: 3}
+  - {fileID: 21300000, guid: def98d3951ad9104ba47864c61118c0d, type: 3}
+  - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
+  - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
+  - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
 --- !u!114 &2441330262130801130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,4 +156,4 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
-  m_LayoutPriority: 1
+  m_LayoutPriority: 500

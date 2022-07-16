@@ -5,7 +5,8 @@ public enum AbilityType
 { 
     Attack,
     Armor,
-    Invest
+    Invest,
+    EnemyMove
 }
 
 public class Ability : MonoBehaviour
@@ -34,6 +35,10 @@ public class Ability : MonoBehaviour
                 Invest();
                 break;
 
+            case AbilityType.EnemyMove:
+                GameManager.Instance.CurrentEnemy.CastAbility(_abilityValue);
+                break;
+
             default:
                 Debug.LogError("No ability type chosen");
                 break;
@@ -42,16 +47,19 @@ public class Ability : MonoBehaviour
 
     private void Attack()
     {
+        Debug.Log("Attacked");
         GameManager.Instance.CurrentEnemy.TakeDamage(_abilityValue);
     }
 
     private void Armor()
     {
+        Debug.Log("Armor up");
         GameManager.Instance.Player.ArmorUp(_abilityValue);
     }
 
     private void Invest()
     {
+        Debug.Log("Invested");
         GameManager.Instance.Player.Invest(_abilityValue);
     }
 }
