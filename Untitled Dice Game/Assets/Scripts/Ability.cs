@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public enum AbilityType
 { 
-    None,
     Attack,
     Armor,
     Invest
@@ -12,8 +11,6 @@ public enum AbilityType
 public class Ability : MonoBehaviour
 {
     [SerializeField] private AbilityType _abilityType;
-    [SerializeField] private Image _diceImage;
-    [SerializeField] private Sprite _emptyDice;
     private int _abilityValue = 0;
 
     public void SetDiceInAbility(Dice dice)
@@ -21,7 +18,7 @@ public class Ability : MonoBehaviour
         _abilityValue = dice.DiceValue;
     }
 
-    private void CastAbility()
+    public void CastAbility()
     {
         switch (_abilityType)
         {
@@ -45,16 +42,16 @@ public class Ability : MonoBehaviour
 
     private void Attack()
     {
-        Debug.Log("Attacking");
+        GameManager.Instance.CurrentEnemy.TakeDamage(_abilityValue);
     }
 
     private void Armor()
     {
-        Debug.Log("Armoring up");
+        GameManager.Instance.Player.ArmorUp(_abilityValue);
     }
 
     private void Invest()
     {
-        Debug.Log("Investing");
+        GameManager.Instance.Player.Invest(_abilityValue);
     }
 }

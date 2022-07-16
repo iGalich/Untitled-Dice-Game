@@ -8,9 +8,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _currentDiceAmount = 3;
     [SerializeField] private Dice[] _dices = new Dice[6];
 
+    [Header("Battle")]
+    [SerializeField] private Player _player;
+    [SerializeField] private Enemy _currentEnemy;
+
     public Canvas Canvas => _canvas;
     public int CurrentDiceAmount => _currentDiceAmount;
     public Dice[] Dices => _dices;
+    public Player Player { get => _player; set => _player = value; }
+    public Enemy CurrentEnemy { get => _currentEnemy; set => _currentEnemy = value; }
 
     private void Awake()
     {
