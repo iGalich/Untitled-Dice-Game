@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _armorText;
     [SerializeField] private TextMeshProUGUI _investText;
 
+    public int Health { get => _health; set => _health = value; }
+    public int MaxHealth => _maxHealth;
     public int Invested => _invested;
 
     private void Start()

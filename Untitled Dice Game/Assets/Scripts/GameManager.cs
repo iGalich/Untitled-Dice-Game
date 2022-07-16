@@ -10,17 +10,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Dice[] _dices = new Dice[6];
     [SerializeField] private Dice _extraDice;
     [SerializeField] private GameObject _lootCanvas;
+    [SerializeField] private EnemyInfo[] _enemies;
     private int _enemyIndex = 0;
 
     [Header("Battle")]
-    [SerializeField] private GameObject[] _enemies;
     [SerializeField] private Player _player;
     [SerializeField] private Enemy _currentEnemy;
 
     public Canvas Canvas => _canvas;
     public GameObject LootCanvas { get => _lootCanvas; set => _lootCanvas = value; }
-    public int CurrentDiceAmount => _currentDiceAmount;
-    public Dice[] Dices => _dices;
+    public int CurrentDiceAmount { get => _currentDiceAmount; set => _currentDiceAmount = value; }
+    public Dice[] Dices { get => _dices; set => _dices = value; }
     public Dice ExtraDice => _extraDice;
     public Player Player { get => _player; set => _player = value; }
     public Enemy CurrentEnemy { get => _currentEnemy; set => _currentEnemy = value; }
@@ -44,9 +44,12 @@ public class GameManager : MonoBehaviour
         _currentEnemy.ChooseAbility();
     }
 
-    public void NextScene()
+    public void NextBattle()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        _enemyIndex++;
+        _currentEnemy.GetComponent<Enemy>().Image.sprite = _enemies[_enemyIndex].enemySprite;
+        _currentEnemy.GetComponent<Enemy>().MaxHealth = _enemies[_enemyIndex].maxHealth;
+        _currentEnemy.Reset();
     }
 
     public void NewDice(ItemValue value)

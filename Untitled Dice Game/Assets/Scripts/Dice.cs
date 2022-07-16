@@ -19,7 +19,7 @@ public class Dice : MonoBehaviour
     public bool CustomDice { get => _customDice; set => _customDice = value; }
     public ItemValue DiceType { get => _diceType; set => _diceType = value; }
 
-    private void Start()
+    private void Awake()
     {
         _image = GetComponent<Image>();
         _image.sprite = _diceSprites[5];

@@ -23,14 +23,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image _healthBarFront;
     [SerializeField] private TextMeshProUGUI _healthText;
 
+    public Image Image { get => _image; set => _image = value; }
+    public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+
     private void Awake()
     {
         _image = GetComponent<Image>();
+        _health = _maxHealth;
     }
 
     private void Start()
     {
-        _health = _maxHealth;
         UpdateHealthText();
     }
 
@@ -39,6 +42,17 @@ public class Enemy : MonoBehaviour
         var delta = Time.deltaTime;
 
         SyncHealthBar(delta);
+    }
+
+    public void Reset()
+    {
+        _health = _maxHealth;
+        UpdateHealthText();
+    }
+
+    public bool IsDead()
+    {
+        return _health <= 0;
     }
 
     private void SyncHealthBar(float delta)
@@ -93,8 +107,6 @@ public class Enemy : MonoBehaviour
 
         switch (_nextAbility)
         {
-            case EnemyAbility.AttackAndHeal:
-
             case EnemyAbility.Attack:
                 GameManager.Instance.Player.TakeDamage(_diceRoll);
                 break;
@@ -103,6 +115,10 @@ public class Enemy : MonoBehaviour
                 Heal(_diceRoll);
                 break;
 
+            case EnemyAbility.AttackAndHeal:
+                GameManager.Instance.Player.TakeDamage(_diceRoll);
+                Heal(_diceRoll);
+                break;
         }
     }
 
@@ -128,6 +144,6 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
-        GameManager.Instance.LootCanvas.SetActive(true);
+        FunctionTimer.Create(() => GameManager.Instance.LootCanvas.SetActive(true), 2.5f);
     }
 }

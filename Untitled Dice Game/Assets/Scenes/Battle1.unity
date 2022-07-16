@@ -3892,7 +3892,7 @@ MonoBehaviour:
   - {fileID: 682284518}
   - {fileID: 732015825}
   - {fileID: 388082603}
-  _abilityDelay: 2
+  _abilityDelay: 1
 --- !u!4 &1527487670
 Transform:
   m_ObjectHideFlags: 0
@@ -4356,8 +4356,8 @@ MonoBehaviour:
   _extraDice: {fileID: 1409964697}
   _lootCanvas: {fileID: 379934060}
   _enemies:
-  - {fileID: 6686970272827990279, guid: 0efb338b09303e747a43f667721ee4bb, type: 3}
-  - {fileID: 6686970272827990279, guid: bf13c5662a29c5749b96debb692b90d3, type: 3}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: a53842f3c6ed882428a2db6063ad69e3, type: 2}
   _player: {fileID: 722450595}
   _currentEnemy: {fileID: 1724028826}
 --- !u!114 &1981247142 stripped
