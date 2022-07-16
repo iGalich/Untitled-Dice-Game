@@ -128,6 +128,6 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
-        Debug.Log("Enemy has been defeated");
+        GameManager.Instance.LootCanvas.SetActive(true);
     }
 }
