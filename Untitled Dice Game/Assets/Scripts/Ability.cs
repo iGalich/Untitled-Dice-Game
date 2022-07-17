@@ -47,7 +47,8 @@ public class Ability : MonoBehaviour
 
     private void Attack()
     {
-        Debug.Log("Attacked");
+        if (_abilityValue <= 0) return;
+        GameManager.Instance.Player.AttackAnimation();
         GameManager.Instance.CurrentEnemy.TakeDamage(_abilityValue);
     }
 

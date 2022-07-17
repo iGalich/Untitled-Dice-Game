@@ -16,12 +16,14 @@ public class LootCanvas : MonoBehaviour
     public void Heal()
     {
         GameManager.Instance.Player.Heal(InvestCalculator.Instance.InvestToHeal());
+        this.gameObject.SetActive(false);
         GameManager.Instance.NextBattle();
     }
 
     public void AddNewDice()
     {
         GameManager.Instance.NewDice(InvestCalculator.Instance.InvestToItem());
+        this.gameObject.SetActive(false);
         GameManager.Instance.NextBattle();
     }
 }

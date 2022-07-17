@@ -47,14 +47,17 @@ public class GameManager : MonoBehaviour
     public void NextBattle()
     {
         _enemyIndex++;
-        _currentEnemy.GetComponent<Enemy>().Image.sprite = _enemies[_enemyIndex].enemySprite;
+        //_currentEnemy.GetComponent<Enemy>().Image.sprite = _enemies[_enemyIndex].enemySprite;
         _currentEnemy.GetComponent<Enemy>().MaxHealth = _enemies[_enemyIndex].maxHealth;
+        _currentEnemy.GetComponent<Enemy>().Anim.runtimeAnimatorController = _enemies[_enemyIndex]._animController;
         _currentEnemy.Reset();
+
+        NewTurn();
     }
 
     public void NewDice(ItemValue value)
     {
-        _dices[_currentDiceAmount].enabled = true;
+        _dices[_currentDiceAmount].gameObject.SetActive(true);
 
         if (value != ItemValue.Regular)
         {

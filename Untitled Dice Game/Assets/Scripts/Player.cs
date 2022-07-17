@@ -4,6 +4,10 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Animator _anim;
+    private bool _inAnimation = false;
+    private bool _isDead = false;
+
     [Header("Stats")]
     [SerializeField] private int _maxHealth = 10;
     [SerializeField] private int _armor = 0;
@@ -35,6 +39,12 @@ public class Player : MonoBehaviour
         var delta = Time.deltaTime;
 
         SyncHealthBar(delta);
+
+        if (_inAnimation && !_isDead)
+        {
+            _inAnimation = false;
+            FunctionTimer.Create(() => _anim.CrossFade(Idle, 0f, 0), 0.5f);  
+        }
     }
 
     private void SyncHealthBar(float delta)
@@ -94,8 +104,11 @@ public class Player : MonoBehaviour
 
         UpdateHealthText();
 
+        _inAnimation = true;
+        _anim.CrossFade(Hurt, 0f, 0);
+
         if (_health <= 0)
-            Death();
+            PlayerDeath();
     }
 
     public void ArmorUp(int value)
@@ -110,8 +123,21 @@ public class Player : MonoBehaviour
         UpdateInvestText();
     }
 
-    private void Death()
+    private void PlayerDeath()
     {
-        Debug.Log("Player has died");
+        _isDead = true;
+        _inAnimation = true;
+        _anim.CrossFade(Death, 0f, 0);
     }
+
+    public void AttackAnimation()
+    {
+        _inAnimation = true;
+        _anim.CrossFade(Attack, 0f, 0);
+    }
+
+    private static readonly int Idle = Animator.StringToHash("Idle");
+    private static readonly int Hurt = Animator.StringToHash("Hurt");
+    private static readonly int Attack = Animator.StringToHash("Attack");
+    private static readonly int Death = Animator.StringToHash("Death");
 }

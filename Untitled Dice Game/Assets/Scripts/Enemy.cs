@@ -11,12 +11,15 @@ public enum EnemyAbility
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private Animator _anim;
     [SerializeField] private int _maxHealth = 10;
     [SerializeField] private int _health;
     [SerializeField] private Image _image;
     [SerializeField] private TextMeshProUGUI _enemyAbilityText;
     private EnemyAbility _nextAbility;
     private int _diceRoll;
+    private bool _inAnimation = false;
+    private bool _isDead = false;
 
     [Header("HealthUI")]
     [SerializeField] private Image _healthBarBack;
@@ -25,6 +28,8 @@ public class Enemy : MonoBehaviour
 
     public Image Image { get => _image; set => _image = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+
+    public Animator Anim { get => _anim; set => _anim = value; }
 
     private void Awake()
     {
@@ -42,11 +47,20 @@ public class Enemy : MonoBehaviour
         var delta = Time.deltaTime;
 
         SyncHealthBar(delta);
+
+        if (_inAnimation && !_isDead)
+        {
+            _inAnimation = false;
+            FunctionTimer.Create(() => _anim.CrossFade(Idle, 0f, 0), 0.5f);
+        }
     }
 
     public void Reset()
     {
+        _isDead = false;
         _health = _maxHealth;
+        _healthBarBack.fillAmount = 1f;
+        _healthBarFront.fillAmount = 1f;
         UpdateHealthText();
     }
 
@@ -109,6 +123,8 @@ public class Enemy : MonoBehaviour
         {
             case EnemyAbility.Attack:
                 GameManager.Instance.Player.TakeDamage(_diceRoll);
+                _inAnimation = true;
+                _anim.CrossFade(Attack, 0f, 0);
                 break;
 
             case EnemyAbility.Heal:
@@ -117,6 +133,8 @@ public class Enemy : MonoBehaviour
 
             case EnemyAbility.AttackAndHeal:
                 GameManager.Instance.Player.TakeDamage(_diceRoll);
+                _inAnimation = true;
+                _anim.CrossFade(Attack, 0f, 0);
                 Heal(_diceRoll);
                 break;
         }
@@ -125,11 +143,12 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int value)
     {
         _health -= value;
-
+        _anim.CrossFade(Hurt, 0f, 0);
+        _inAnimation = true;
         UpdateHealthText();
 
         if (_health <= 0)
-            Death();
+            EnemyDeath();
     }
 
     public void Heal(int value)
@@ -142,8 +161,16 @@ public class Enemy : MonoBehaviour
         UpdateHealthText();
     }
 
-    private void Death()
+    private void EnemyDeath()
     {
+        _anim.CrossFade(Death, 0f, 0);
+        _inAnimation = true;
+        _isDead = true;
         FunctionTimer.Create(() => GameManager.Instance.LootCanvas.SetActive(true), 2.5f);
     }
+
+    private static readonly int Idle = Animator.StringToHash("Idle");
+    private static readonly int Hurt = Animator.StringToHash("Hurt");
+    private static readonly int Attack = Animator.StringToHash("Attack");
+    private static readonly int Death = Animator.StringToHash("Death");
 }
