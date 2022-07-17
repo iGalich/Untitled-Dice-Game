@@ -112,6 +112,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
   - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
   - {fileID: 21300000, guid: 7906ede8307e14543bfb1310aabf2433, type: 3}
+  _diceRollSFX:
+  - {fileID: 8300000, guid: 5e0244eb6fe1ae24a999d1f55c50a789, type: 3}
+  - {fileID: 8300000, guid: 1be10cc3df9f36e4aac7040e28e5af7e, type: 3}
+  - {fileID: 8300000, guid: 6ba7665b329576d4788e869a33cefd84, type: 3}
 --- !u!114 &2441330262130801130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 0}
+  _pickupDiceSFX: {fileID: 8300000, guid: 2f26e98e2ee1b774dbc4e6b8fc4f2368, type: 3}
 --- !u!225 &6207819443740603803
 CanvasGroup:
   m_ObjectHideFlags: 0

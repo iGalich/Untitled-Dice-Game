@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
     [SerializeField] private Canvas _canvas;
+    [SerializeField] private AudioClip _pickupDiceSFX;
     private RectTransform _rectTransform;
     private CanvasGroup _canvasGroup;
 
@@ -22,6 +23,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         _canvasGroup.alpha = 0.6f;
         _canvasGroup.blocksRaycasts = false;
+        AudioManager.Instance.PlaySound(_pickupDiceSFX, 0.5f);
     }
 
     public void OnDrag(PointerEventData eventData)

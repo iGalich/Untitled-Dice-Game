@@ -6,6 +6,7 @@ public class Dice : MonoBehaviour
     [SerializeField] private Sprite[] _diceSprites;
     [SerializeField] private Sprite[] _weakDiceSprites;
     [SerializeField] private Sprite[] _powerfulDiceSprites;
+    [SerializeField] private AudioClip[] _diceRollSFX;
     private Vector2 _originalPosition;
     private Image _image;
     private int _diceValue;
@@ -60,6 +61,8 @@ public class Dice : MonoBehaviour
             _image.sprite = _diceSprites[_diceThrow];
             _diceValue = _diceThrow + 1;
         }
+
+        AudioManager.Instance.PlaySound(_diceRollSFX[Random.Range(0, _diceRollSFX.Length)]);
     }
 
     public void ResetPosition()

@@ -84,6 +84,11 @@ public class Enemy : MonoBehaviour
         _healthText.text = $"{_health} / {_maxHealth}";
     }
 
+    private void ShakeBar()
+    {
+        iTween.ShakePosition(_healthBarFront.rectTransform.parent.GetComponent<RectTransform>().gameObject, Vector3.one * 50f, 0.5f);
+    }
+
     public void ChooseAbility()
     {
         _diceRoll = Random.Range(1, 7);
@@ -142,6 +147,9 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int value)
     {
+        if (value <= 0) return;
+
+        ShakeBar();
         _health -= value;
         _anim.CrossFade(Hurt, 0f, 0);
         _inAnimation = true;

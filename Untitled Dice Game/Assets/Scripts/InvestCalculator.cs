@@ -11,6 +11,8 @@ public class InvestCalculator : MonoBehaviour
 {
     public static InvestCalculator Instance { get; private set; }
 
+    [SerializeField] private int _regularThreshhold = 8;
+    [SerializeField] private int _powerfulThreshhold = 16;
     private int _investedCount;
 
     public int InvestedCount { get => _investedCount; set => _investedCount = value; }
@@ -34,9 +36,9 @@ public class InvestCalculator : MonoBehaviour
     {
         _investedCount = GameManager.Instance.Player.Invested;
 
-        if (_investedCount < 10)
+        if (_investedCount < _regularThreshhold)
             return ItemValue.Weak;
-        if (_investedCount < 20)
+        if (_investedCount < _powerfulThreshhold)
             return ItemValue.Regular;
         return ItemValue.Powerful;
     }

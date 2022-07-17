@@ -21,9 +21,14 @@ public class Player : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _armorText;
     [SerializeField] private TextMeshProUGUI _investText;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip[] _armorUpSFX;
+    [SerializeField] private AudioClip[] _investSFX;
+
     public int Health { get => _health; set => _health = value; }
     public int MaxHealth => _maxHealth;
-    public int Invested => _invested;
+    public int Invested { get => _invested; set => _invested = value; }
+    public bool IsDead => _isDead;
 
     private void Start()
     {
@@ -62,12 +67,17 @@ public class Player : MonoBehaviour
         _healthText.text = $"{_health} / {_maxHealth}";
     }
 
+    private void ShakeBar()
+    {
+        iTween.ShakePosition(_healthBarFront.rectTransform.parent.GetComponent<RectTransform>().gameObject, Vector3.one * 50f, 0.5f);
+    }
+
     private void UpdateArmorText()
     {
         _armorText.text = $"Armor : {_armor}";
     }
 
-    private void UpdateInvestText()
+    public void UpdateInvestText()
     {
         if (GameManager.Instance.EnemyIndex == 2)
             _investText.text = "Investing now heals";
@@ -123,8 +133,10 @@ public class Player : MonoBehaviour
             UpdateArmorText();
         }
 
-        _health -= value;
+        if (value > 0)
+            ShakeBar();
 
+        _health -= value;
         UpdateHealthText();
 
         _inAnimation = true;
@@ -138,6 +150,7 @@ public class Player : MonoBehaviour
     {
         _armor += value;
         UpdateArmorText();
+        AudioManager.Instance.PlaySound(_armorUpSFX[Random.Range(0, _armorUpSFX.Length)]);
     }
 
     public void Invest(int value)
@@ -148,6 +161,7 @@ public class Player : MonoBehaviour
         {
             _invested += value;
             UpdateInvestText();
+            AudioManager.Instance.PlaySound(_investSFX[Random.Range(0, _investSFX.Length)]);
         }
     }
 
@@ -156,6 +170,7 @@ public class Player : MonoBehaviour
         _isDead = true;
         _inAnimation = true;
         _anim.CrossFade(Death, 0f, 0);
+        FunctionTimer.Create(() => GameManager.Instance.LoadMainMenu(), 2.5f);
     }
 
     public void AttackAnimation()

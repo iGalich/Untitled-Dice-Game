@@ -47,9 +47,16 @@ public class GameManager : MonoBehaviour
 
     public void NewTurn()
     {
+        if (_player.IsDead) return;
+
         RollDices();
         _currentEnemy.ChooseAbility();
         newTurnStarted.Invoke();
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void NextBattle()
@@ -63,6 +70,9 @@ public class GameManager : MonoBehaviour
         _currentEnemy.GetComponent<Enemy>().MaxHealth = _enemies[_enemyIndex].maxHealth;
         _currentEnemy.GetComponent<Enemy>().Anim.runtimeAnimatorController = _enemies[_enemyIndex]._animController;
         _currentEnemy.Reset();
+
+        _player.Invested = 0;
+        _player.UpdateInvestText();
 
         NewTurn();
     }
