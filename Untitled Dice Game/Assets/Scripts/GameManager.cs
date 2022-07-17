@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    public UnityEvent newTurnStarted;
 
     [SerializeField] private Canvas _canvas;
     [SerializeField] private int _currentDiceAmount = 2;
@@ -11,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Dice _extraDice;
     [SerializeField] private GameObject _lootCanvas;
     [SerializeField] private EnemyInfo[] _enemies;
+    private Color _powerfulDiceColor = Color.yellow;
+    private Color _weakDiceColor = Color.red;
     private int _enemyIndex = 0;
 
     [Header("Battle")]
@@ -24,6 +30,7 @@ public class GameManager : MonoBehaviour
     public Dice ExtraDice => _extraDice;
     public Player Player { get => _player; set => _player = value; }
     public Enemy CurrentEnemy { get => _currentEnemy; set => _currentEnemy = value; }
+    public int EnemyIndex => _enemyIndex;
 
     private void Awake()
     {
@@ -42,11 +49,16 @@ public class GameManager : MonoBehaviour
     {
         RollDices();
         _currentEnemy.ChooseAbility();
+        newTurnStarted.Invoke();
     }
 
     public void NextBattle()
     {
         _enemyIndex++;
+
+        if (_enemyIndex > 2)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
         //_currentEnemy.GetComponent<Enemy>().Image.sprite = _enemies[_enemyIndex].enemySprite;
         _currentEnemy.GetComponent<Enemy>().MaxHealth = _enemies[_enemyIndex].maxHealth;
         _currentEnemy.GetComponent<Enemy>().Anim.runtimeAnimatorController = _enemies[_enemyIndex]._animController;
@@ -58,11 +70,14 @@ public class GameManager : MonoBehaviour
     public void NewDice(ItemValue value)
     {
         _dices[_currentDiceAmount].gameObject.SetActive(true);
+        print(_dices[_currentDiceAmount] + " has been activated");
 
         if (value != ItemValue.Regular)
         {
             _dices[_currentDiceAmount].CustomDice = true;
             _dices[_currentDiceAmount].DiceType = value;
+
+            _dices[_currentDiceAmount].gameObject.GetComponent<Image>().color = (value == ItemValue.Powerful) ? _powerfulDiceColor : _weakDiceColor;
         }
         else
         {

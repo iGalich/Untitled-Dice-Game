@@ -69,7 +69,30 @@ public class Player : MonoBehaviour
 
     private void UpdateInvestText()
     {
-        _investText.text = $"Amount Invested:\n{_invested}";
+        if (GameManager.Instance.EnemyIndex == 2)
+            _investText.text = "Investing now heals";
+        else
+        {
+            var type = InvestCalculator.Instance.InvestToItem();
+            string color = "";
+
+            switch (type)
+            {
+                case ItemValue.Powerful:
+                    color = "yellow";
+                    break;
+
+                case ItemValue.Regular:
+                    color = "green";
+                    break;
+
+                case ItemValue.Weak:
+                    color = "red";
+                    break;
+            }
+
+            _investText.text = $"Amount Invested:\n<color={color}>{_invested}</color>";
+        }
     }
 
     public void Heal(int value)
@@ -119,8 +142,13 @@ public class Player : MonoBehaviour
 
     public void Invest(int value)
     {
-        _invested += value;
-        UpdateInvestText();
+        if (GameManager.Instance.EnemyIndex == 2)
+            Heal(value);
+        else
+        {
+            _invested += value;
+            UpdateInvestText();
+        }
     }
 
     private void PlayerDeath()

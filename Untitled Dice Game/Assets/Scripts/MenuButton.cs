@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartButton : MonoBehaviour
+public class MenuButton : MonoBehaviour
 {
     public void LoadNextScene()
     {

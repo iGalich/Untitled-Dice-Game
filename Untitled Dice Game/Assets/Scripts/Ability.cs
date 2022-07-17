@@ -52,15 +52,18 @@ public class Ability : MonoBehaviour
         GameManager.Instance.CurrentEnemy.TakeDamage(_abilityValue);
     }
 
+    public void Reset()
+    {
+        _abilityValue = 0;
+    }
+
     private void Armor()
     {
-        Debug.Log("Armor up");
         GameManager.Instance.Player.ArmorUp(_abilityValue);
     }
 
     private void Invest()
     {
-        Debug.Log("Invested");
         GameManager.Instance.Player.Invest(_abilityValue);
     }
 }
