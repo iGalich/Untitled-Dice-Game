@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b46e6910af6fd44597abd871743274b, type: 3}
   m_Name: RedEnemy
   m_EditorClassIdentifier: 
-  enemySprite: {fileID: 0}
-  maxHealth: 0
+  maxHealth: 50
   _animController: {fileID: 0}
