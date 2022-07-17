@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _health;
     [SerializeField] private Image _image;
     [SerializeField] private TextMeshProUGUI _enemyAbilityText;
+    private int _diceCount = 1;
     private EnemyAbility _nextAbility;
     private int _diceRoll;
     private bool _inAnimation = false;
@@ -26,9 +27,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image _healthBarFront;
     [SerializeField] private TextMeshProUGUI _healthText;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip[] _hurtSFX;
+
     public Image Image { get => _image; set => _image = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
-
+    public int DiceCount { get => _diceCount; set => _diceCount = value; }
     public Animator Anim { get => _anim; set => _anim = value; }
 
     private void Awake()
@@ -91,7 +95,12 @@ public class Enemy : MonoBehaviour
 
     public void ChooseAbility()
     {
-        _diceRoll = Random.Range(1, 7);
+        _diceRoll = 0;
+        for (int i = 0; i < _diceCount; i++)
+        {
+            _diceRoll += Random.Range(1, 7);
+        }
+        //_diceRoll = Random.Range(1, 7);
 
         if (_health == _maxHealth)
             _nextAbility = EnemyAbility.Attack;
@@ -109,7 +118,7 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAbility.AttackAndHeal:
-                _enemyAbilityText.text = $"Attack and Heal for {_diceRoll}";
+                _enemyAbilityText.text = $"Attack and Heal for {Mathf.Ceil(_diceRoll / 2f)}";
                 break;
 
             default:
@@ -137,10 +146,12 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAbility.AttackAndHeal:
+                _diceRoll = (int)Mathf.Ceil(_diceRoll / 2f);
+                var temp = _diceRoll;
                 GameManager.Instance.Player.TakeDamage(_diceRoll);
                 _inAnimation = true;
                 _anim.CrossFade(Attack, 0f, 0);
-                Heal(_diceRoll);
+                FunctionTimer.Create(() => Heal(temp), 1f);
                 break;
         }
     }
@@ -149,6 +160,7 @@ public class Enemy : MonoBehaviour
     {
         if (value <= 0) return;
 
+        AudioManager.Instance.PlaySound(_hurtSFX[Random.Range(0, _hurtSFX.Length)]);
         ShakeBar();
         _health -= value;
         _anim.CrossFade(Hurt, 0f, 0);
@@ -161,6 +173,9 @@ public class Enemy : MonoBehaviour
 
     public void Heal(int value)
     {
+        if (value <= 0) return;
+
+        AudioManager.Instance.PlaySound(GameManager.Instance.HealSFX[Random.Range(0, GameManager.Instance.HealSFX.Length)]);
         _health += value;
 
         if (_health > _maxHealth)
@@ -174,7 +189,11 @@ public class Enemy : MonoBehaviour
         _anim.CrossFade(Death, 0f, 0);
         _inAnimation = true;
         _isDead = true;
-        FunctionTimer.Create(() => GameManager.Instance.LootCanvas.SetActive(true), 2.5f);
+
+        if (GameManager.Instance.EnemyIndex < 2)
+            FunctionTimer.Create(() => GameManager.Instance.LootCanvas.SetActive(true), 2.5f);
+        else
+            FunctionTimer.Create(() => GameManager.Instance.NextBattle(), 2.5f);
     }
 
     private static readonly int Idle = Animator.StringToHash("Idle");

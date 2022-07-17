@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioClip[] _armorUpSFX;
     [SerializeField] private AudioClip[] _investSFX;
+    [SerializeField] private AudioClip[] _hurtSFX;
+    [SerializeField] private AudioClip _deathJingle;
 
     public int Health { get => _health; set => _health = value; }
     public int MaxHealth => _maxHealth;
@@ -107,6 +109,9 @@ public class Player : MonoBehaviour
 
     public void Heal(int value)
     {
+        if (value <= 0) return;
+
+        AudioManager.Instance.PlaySound(GameManager.Instance.HealSFX[Random.Range(0, GameManager.Instance.HealSFX.Length)]);
         _health += value;
 
         if (_health > _maxHealth)
@@ -117,6 +122,8 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int value)
     {
+        AudioManager.Instance.PlaySound(_hurtSFX[Random.Range(0, _hurtSFX.Length)]);
+
         if (_armor > 0)
         {
             if (_armor >= value)
@@ -134,7 +141,9 @@ public class Player : MonoBehaviour
         }
 
         if (value > 0)
+        {
             ShakeBar();
+        }
 
         _health -= value;
         UpdateHealthText();
@@ -148,6 +157,7 @@ public class Player : MonoBehaviour
 
     public void ArmorUp(int value)
     {
+        if (value <= 0) return;
         _armor += value;
         UpdateArmorText();
         AudioManager.Instance.PlaySound(_armorUpSFX[Random.Range(0, _armorUpSFX.Length)]);
@@ -155,6 +165,8 @@ public class Player : MonoBehaviour
 
     public void Invest(int value)
     {
+        if (value <= 0) return;
+
         if (GameManager.Instance.EnemyIndex == 2)
             Heal(value);
         else
@@ -167,10 +179,11 @@ public class Player : MonoBehaviour
 
     private void PlayerDeath()
     {
+        AudioManager.Instance.SwitchMusic(_deathJingle);
         _isDead = true;
         _inAnimation = true;
         _anim.CrossFade(Death, 0f, 0);
-        FunctionTimer.Create(() => GameManager.Instance.LoadMainMenu(), 2.5f);
+        FunctionTimer.Create(() => GameManager.Instance.LoadMainMenu(), _deathJingle.length);
     }
 
     public void AttackAnimation()

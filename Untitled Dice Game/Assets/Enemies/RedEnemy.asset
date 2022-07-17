@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b46e6910af6fd44597abd871743274b, type: 3}
   m_Name: RedEnemy
   m_EditorClassIdentifier: 
-  maxHealth: 40
+  maxHealth: 25
   _animController: {fileID: 9100000, guid: 38f98c3bd477ab543adeab74e32ac795, type: 2}
+  diceCount: 3

@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [Header("Battle")]
     [SerializeField] private Player _player;
     [SerializeField] private Enemy _currentEnemy;
+    [SerializeField] private AudioClip[] _healSFX;
 
     public Canvas Canvas => _canvas;
     public GameObject LootCanvas { get => _lootCanvas; set => _lootCanvas = value; }
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     public Player Player { get => _player; set => _player = value; }
     public Enemy CurrentEnemy { get => _currentEnemy; set => _currentEnemy = value; }
     public int EnemyIndex => _enemyIndex;
+    public AudioClip[] HealSFX => _healSFX;
 
     private void Awake()
     {
@@ -69,6 +71,7 @@ public class GameManager : MonoBehaviour
         //_currentEnemy.GetComponent<Enemy>().Image.sprite = _enemies[_enemyIndex].enemySprite;
         _currentEnemy.GetComponent<Enemy>().MaxHealth = _enemies[_enemyIndex].maxHealth;
         _currentEnemy.GetComponent<Enemy>().Anim.runtimeAnimatorController = _enemies[_enemyIndex]._animController;
+        _currentEnemy.GetComponent<Enemy>().DiceCount = _enemies[_enemyIndex].diceCount;
         _currentEnemy.Reset();
 
         _player.Invested = 0;

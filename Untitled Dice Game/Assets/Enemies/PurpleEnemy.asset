@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b46e6910af6fd44597abd871743274b, type: 3}
   m_Name: PurpleEnemy
   m_EditorClassIdentifier: 
-  enemySprite: {fileID: -848221959118228014, guid: b603d49422b3ceb418d462d5fb2aaba2, type: 3}
-  maxHealth: 30
+  maxHealth: 20
   _animController: {fileID: 9100000, guid: 07509544da34cc44ba25096530d203df, type: 2}
+  diceCount: 2
