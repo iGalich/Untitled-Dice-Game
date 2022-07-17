@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
         if (_health == _maxHealth)
             _nextAbility = EnemyAbility.Attack;
         else
-            _nextAbility = (EnemyAbility)Random.Range(0, 3);
+            _nextAbility = CalculateNextAbility();
 
         switch (_nextAbility)
         {
@@ -118,13 +118,24 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAbility.AttackAndHeal:
-                _enemyAbilityText.text = $"Attack and Heal for {Mathf.Ceil(_diceRoll / 2f)}";
+                _enemyAbilityText.text = $"Attack and Heal for {_diceRoll}";
                 break;
 
             default:
                 Debug.Log("Enemy ability wasn't chosen");
                 break;
         }
+    }
+
+    private EnemyAbility CalculateNextAbility()
+    {
+        var r = Random.Range(0, 100);
+
+        if (r < 50)
+            return EnemyAbility.Attack;
+        if (r < 85)
+            return EnemyAbility.Heal;
+        return EnemyAbility.AttackAndHeal;
     }
 
     public void CastAbility(int value)
@@ -146,7 +157,6 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyAbility.AttackAndHeal:
-                _diceRoll = (int)Mathf.Ceil(_diceRoll / 2f);
                 var temp = _diceRoll;
                 GameManager.Instance.Player.TakeDamage(_diceRoll);
                 _inAnimation = true;
